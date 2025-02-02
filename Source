@@ -11,8 +11,6 @@ local Objects = {}
 function Kavo:DraggingEnabled(frame, parent)
 
     parent = parent or frame
-
-    -- stolen from wally or kiriot, kek
     local dragging = false
     local dragInput, mousePos, framePos
 
@@ -145,6 +143,12 @@ function Kavo:ToggleUI()
         game:GetService("CoreGui")[LibName].Enabled = false
     else
         game:GetService("CoreGui")[LibName].Enabled = true
+    end
+end
+
+function Kavo:Exit()
+    if game:GetService("CoreGui"):FindFirstChild(LibName) then
+        game:GetService("CoreGui")[LibName]:Destroy()
     end
 end
 
