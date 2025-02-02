@@ -130,10 +130,10 @@ pcall(function()
     if not pcall(function()
         readfile(Name)
     end) then
-        writefile(Name, game:service 'HttpService':JSONEncode(SettingsT))
+        writefile(Name, game:GetService("HttpService"):JSONEncode(SettingsT))
     end
 
-    Settings = game:service 'HttpService':JSONEncode(readfile(Name))
+    Settings = game:GetService("HttpService"):JSONEncode(readfile(Name))
 end)
 
 local LibName = tostring(math.random(1, 100)) .. tostring(math.random(1, 50)) .. tostring(math.random(1, 100))
@@ -1336,12 +1336,11 @@ function Kavo.CreateLib(kavName, themeList)
                 return TogFunction
             end
 
-            function Elements:NewSlider(slidInf, slidTip, maxvalue, minvalue, callback)
+            function Elements:NewSlider(slidInf, slidTip, defaultvalue, maxvalue, minvalue, callback)
                 slidInf = slidInf or "Slider"
                 slidTip = slidTip or "Slider tip here"
                 maxvalue = maxvalue or 500
                 minvalue = minvalue or 16
-                startVal = startVal or 0
                 callback = callback or function()
                 end
 
@@ -1484,6 +1483,10 @@ function Kavo.CreateLib(kavName, themeList)
                 UpdateSize()
                 local mouse = game:GetService("Players").LocalPlayer:GetMouse();
 
+                local normalizedValue = (defaultvalue - minvalue) / (maxvalue - minvalue)
+                sliderDrag:TweenSize(UDim2.new(0, math.clamp(normalizedValue * 149, 0, 149), 0, 6), "InOut", "Linear",
+                    0.05, true)
+
                 local ms = game:GetService("Players").LocalPlayer:GetMouse()
                 local uis = game:GetService("UserInputService")
                 local btn = sliderElement
@@ -1508,7 +1511,6 @@ function Kavo.CreateLib(kavName, themeList)
                         hovering = false
                     end
                 end)
-
                 coroutine.wrap(function()
                     while wait() do
                         if not hovering then
